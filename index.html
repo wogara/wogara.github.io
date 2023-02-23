@@ -622,7 +622,7 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                 },
                 downloadMeasurement: function (data) {
                     if (data.Source === 'client') {
-                        document.getElementById('download').innerHTML = 'Download: ' + data.Data.MeanClientMbps.toFixed(2) + ' Mb/s';
+                        document.getElementById('download').innerHTML = 'Download: ' + data.Data.MeanClientMbps.toFixed(2) + ' Mbps';
                     }
                 },
                 downloadComplete: function (data) {
@@ -633,12 +633,12 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                         `Download test is complete:
     Instantaneous server bottleneck bandwidth estimate: ${serverBw} Mbps
     Mean client goodput: ${clientGoodput} Mbps`);
-                    document.getElementById('download').innerHTML = 'Download: ' + clientGoodput.toFixed(2) + ' Mb/s';
+                    document.getElementById('download').innerHTML = 'Download: ' + clientGoodput.toFixed(2) + ' Mbps';
                 },
                 uploadMeasurement: function (data) {
                     if (data.Source === 'server') {
                         document.getElementById('upload').innerHTML = 'Upload: ' + (data.Data.TCPInfo.BytesReceived /
-                            data.Data.TCPInfo.ElapsedTime * 8).toFixed(2) + ' Mb/s';;
+                            data.Data.TCPInfo.ElapsedTime * 8).toFixed(2) + ' Mbps';;
                     }
                 },
                 uploadComplete: function(data) {
