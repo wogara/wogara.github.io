@@ -6,7 +6,7 @@
     <style>
 
       .correct-font {
-        font-size:1.2rem;
+        font-size:2rem;
         font-family: 'Public Sans';
       }
 
@@ -19,9 +19,11 @@
 <body>
   <div class = "correct-font">
     <div id="server"></div>
+    <br />
     <div class = "bold" id="download"></div>
     <div class = "bold" id="upload"></div>
-    <div style="display:none;" id="complete">The speed test is now complete.</div>
+    <br />
+    <div id="complete">The speed test is in progress...</div>
   </div>
   <script type="text/javascript">
 
@@ -663,10 +665,9 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             },
         ).then((exitcode) => {
             const fin = document.getElementById("complete");
-            fin.style.display = "block";
+            fin.innerHTML = "The speed test is now complete.";
             console.log("ndt7 test completed with exit code:", exitcode)
         });
-
         
     </script>
 
