@@ -24,8 +24,19 @@
     <div class = "bold" id="upload"></div>
     <br />
     <div id="complete">The speed test is in progress...</div>
+    <div id="downloadSpeed" hidden></div>
+    <div id="uploadSpeed" hidden></div>
   </div>
   <script type="text/javascript">
+
+      function uuidv4() {
+          return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+          );
+        }
+      let uuid = uuidv4();
+      console.log(uuid);
+
 
 //upload worker
   var uploadBlob = new Blob([ '(',
@@ -641,6 +652,7 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                         `Download test is complete:
     Instantaneous server bottleneck bandwidth estimate: ${serverBw} Mbps
     Mean client goodput: ${clientGoodput} Mbps`);
+                    document.getElementById('downloadSpeed').innerHTML = clientGoodput.toFixed(2);
                     document.getElementById('download').innerHTML = 'Download: ' + clientGoodput.toFixed(2) + ' Mbps';
                 },
                 uploadMeasurement: function (data) {
@@ -655,6 +667,7 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                     // bytes * bits/byte / microseconds = Mbps
                     const throughput =
                     bytesReceived * 8 / elapsed;
+                    document.getElementById('uploadSpeed').innerHTML = throughput.toFixed(2);
                     console.log(
                         `Upload test completed in ${(elapsed / 1000000).toFixed(2)}s
         Mean server throughput: ${throughput} Mbps`);
@@ -666,17 +679,24 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
         ).then((exitcode) => {
             const fin = document.getElementById("complete");
             fin.innerHTML = "The speed test is now complete.";
+            downloadSpeed = document.getElementById('downloadSpeed').innerHTML;
+            uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
             console.log("ndt7 test completed with exit code:", exitcode)
+            fetch('https://shielded-mountain-73374.herokuapp.com/https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
+              method: 'POST',
+              headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({id: uuid, upload: uploadSpeed, download: downloadSpeed})
+            }).then((data) => {
+              console.log(data);
+            })
         });
-        fetch('https://shielded-mountain-73374.herokuapp.com/https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
-          method: 'POST',
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ "id": 78912 })
-        })
-        console.log("post");
+
+
+        
+        
     </script>
 
 </html>
