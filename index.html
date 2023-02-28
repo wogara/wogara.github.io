@@ -668,7 +668,15 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             fin.innerHTML = "The speed test is now complete.";
             console.log("ndt7 test completed with exit code:", exitcode)
         });
-        
+        fetch('https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
+          method: 'POST',
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "id": 78912 })
+        })
+        console.log("post");
     </script>
 
 </html>
