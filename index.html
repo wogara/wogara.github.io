@@ -683,13 +683,14 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
             console.log("ndt7 test completed with exit code:", exitcode)
             //fetch('https://shielded-mountain-73374.herokuapp.com/https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
-              fetch('https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
+              //fetch('https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
+              fetch('http://54.237.28.150:3000', {
               method: 'POST',
               headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
               },
-              body: JSON.stringify({id: uuid, upload: uploadSpeed, download: downloadSpeed})
+              body: JSON.stringify({id: uuid, upload: uploadSpeed, download: downloadSpeed, completed:true})
             }).then((data) => {
               console.log(data);
             })
