@@ -28,7 +28,7 @@
     <div id="uploadSpeed" hidden></div>
   </div>
   <script type="text/javascript">
-
+      console.log(window.location.hostname);
       function uuidv4() {
           return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
           (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -37,6 +37,17 @@
       let uuid = uuidv4();
       console.log(uuid);
       console.log(window.location.href);
+      fetch('https://warm-ridge-94886.herokuapp.com/http://54.237.28.150:3000', {
+              //fetch('http://54.237.28.150:3000', {
+              method: 'POST',
+              headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({id: uuid, upload: null, download: null, completed:false})
+            }).then((data) => {
+              console.log(data);
+            })
 
 //upload worker
   var uploadBlob = new Blob([ '(',
