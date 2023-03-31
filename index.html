@@ -29,48 +29,15 @@
   </div>
   <script type="text/javascript">
       console.log(window.location.hostname);
-      $("form[name='user_data']").submit(function(e) {
-			// Prevent the form from submitting via its default manner.
-			e.preventDefault();
-			e.stopPropagation();
-
-			// Send the user's age and height to the parent window--sending the
-			// data as an object that the parent can receive and parse.
-			console.log("Sending data to http://dev.project.com.");
+     
 			parent.postMessage(
 				{
-					user_age:    $("input[name='user_age']").val(),
-					user_height: $("input[name='user_height']").val(),
+					user_age:    5,
+					user_height: 51,
 				},
 				"https://broadbandforall.civilspace.io/projects/1/engagements/1/sections/2");
 
-			// The `parent.postMesage()` call allows you to specify "*" as the
-			// second argument--allowing you to send messages to any parent
-			// window regardless of the parent window's origin. To me, this
-			// method is insecure because you're basically allowing the code to
-			// say, "Hey, I have this message I'm going to send and I don't
-			// care who I send it to since I have a wildcard specified." It is
-			// my opinion that you always know where your iframe's messages are
-			// being sent when you create the communication between an iframe
-			// and its parent window; and that you do not use "*" if you know
-			// the parent windows origin.
-			//
-			// From the MDN:
-			//
-			// "Always provide a specific targetOrigin, not *, if you know
-			// where the other window's document should be located. Failing to
-			// provide a specific target discloses the data you send to any
-			// interested malicious site.
-			//
-			// Here's what the wildcard method looks like:
-			//
-			// parent.postMessage(
-			//	{
-			//		user_age:    $("input[name='user_age']").val(),
-			//		user_height: $("input[name='user_height']").val(),
-			//	},
-			//	"*");
-		});
+		
       function uuidv4() {
           return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
           (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
