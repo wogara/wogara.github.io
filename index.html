@@ -675,6 +675,16 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
             console.log("ndt7 test completed with exit code:", exitcode)
             window.parent.postMessage(downloadSpeed + ' ' + uploadSpeed, '*');
+            fetch('https://infinite-peak-70034.herokuapp.com/', {
+              method: 'POST',
+              headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({upload: uploadSpeed, download: downloadSpeed, completed:true})
+            }).then((data) => {
+              console.log(data);
+            })
         });
 
 
