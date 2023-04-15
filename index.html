@@ -39,7 +39,8 @@
                       method: 'POST',
                       headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Origin':'https://wogara.github.io/'
                       },
                       body: JSON.stringify({id: uuid})
             }         ).then((data) => {
