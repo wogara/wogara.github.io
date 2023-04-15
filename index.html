@@ -28,7 +28,23 @@
     <div id="uploadSpeed" hidden></div>
   </div>
   <script type="text/javascript">
-    
+    function uuidv4() {
+          return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+          );
+        }
+    const uuid = uuidv4();
+
+    fetch('https://infinite-peak-70034.herokuapp.com/', {
+                      method: 'POST',
+                      headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({id: uuid})
+            }         ).then((data) => {
+                        console.log(data);
+                      })
 
 //upload worker
   var uploadBlob = new Blob([ '(',
@@ -646,6 +662,16 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
     Mean client goodput: ${clientGoodput} Mbps`);
                     document.getElementById('downloadSpeed').innerHTML = clientGoodput.toFixed(2);
                     document.getElementById('download').innerHTML = 'Download: ' + clientGoodput.toFixed(2) + ' Mbps';
+                    fetch('https://infinite-peak-70034.herokuapp.com/download', {
+                      method: 'POST',
+                      headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({download: downloadSpeed, id: uuid, completed:true})
+            }         ).then((data) => {
+                        console.log(data);
+                      })
                 },
                 uploadMeasurement: function (data) {
                     if (data.Source === 'server') {
@@ -656,13 +682,25 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                 uploadComplete: function(data) {
                     const bytesReceived = data.LastServerMeasurement.TCPInfo.BytesReceived;
                     const elapsed = data.LastServerMeasurement.TCPInfo.ElapsedTime;
+
                     // bytes * bits/byte / microseconds = Mbps
                     const throughput =
                     bytesReceived * 8 / elapsed;
                     document.getElementById('uploadSpeed').innerHTML = throughput.toFixed(2);
+                    uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
                     console.log(
                         `Upload test completed in ${(elapsed / 1000000).toFixed(2)}s
-        Mean server throughput: ${throughput} Mbps`);
+                        Mean server throughput: ${throughput} Mbps`);
+                    fetch('https://infinite-peak-70034.herokuapp.com/upload', {
+                      method: 'POST',
+                      headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({upload: uploadSpeed, id: uuid, completed:true})
+            }         ).then((data) => {
+                        console.log(data);
+                      })
                 },
                 error: function (err) {
                     console.log('Error while running the test:', err.message);
