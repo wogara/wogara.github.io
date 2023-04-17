@@ -26,25 +26,32 @@
     <div id="complete">The speed test is in progress...</div>
     <div id="downloadSpeed" hidden></div>
     <div id="uploadSpeed" hidden></div>
+    <div id="serverCity" hidden></div>
   </div>
   <script type="text/javascript">
+
+    const serverUrl = 'https://4e61-2603-7000-4200-df6e-00-1920.ngrok-free.app';
+    //or 'https://infinite-peak-70034.herokuapp.com/'
     function uuidv4() {
           return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
           (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
           );
         }
     const uuid = uuidv4();
-
-    fetch('https://infinite-peak-70034.herokuapp.com/', {
+        console.log(uuid);
+    fetch(serverUrl, {
                       method: 'POST',
                       headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
-                        'Origin':'https://wogara.github.io/'
+                        'Access-Control-Allow-Origin': '*'
                       },
                       body: JSON.stringify({id: uuid})
             }         ).then((data) => {
+
                         console.log(data);
+                      }).catch(error => {
+                        console.log(error);
                       })
 
 //upload worker
@@ -646,6 +653,9 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                         machine: server.machine,
                         locations: server.location,
                     });
+                    document.getElementById('serverCity').innerHTML = server.location.city;
+                    console.log('server locs');
+                    console.log(server.location);
                     document.getElementById('server').innerHTML = 'Testing to: ' + server.machine + ' (' + server.location.city + ')';
                 },
                 downloadMeasurement: function (data) {
@@ -663,13 +673,16 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
     Mean client goodput: ${clientGoodput} Mbps`);
                     document.getElementById('downloadSpeed').innerHTML = clientGoodput.toFixed(2);
                     document.getElementById('download').innerHTML = 'Download: ' + clientGoodput.toFixed(2) + ' Mbps';
-                    fetch('https://infinite-peak-70034.herokuapp.com/download', {
+                    let downloadSpeedNum = document.getElementById('downloadSpeed').innerHTML;
+                    let serverCity = document.getElementById('serverCity').innerHTML;
+                    fetch(serverUrl + '/download', {
                       method: 'POST',
                       headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                       },
-                      body: JSON.stringify({download: downloadSpeed, id: uuid, completed:true})
+                      body: JSON.stringify({download: downloadSpeedNum, id: uuid, server: serverCity})
             }         ).then((data) => {
                         console.log(data);
                       })
@@ -688,17 +701,18 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                     const throughput =
                     bytesReceived * 8 / elapsed;
                     document.getElementById('uploadSpeed').innerHTML = throughput.toFixed(2);
-                    uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
+                    let uploadSpeedNum = document.getElementById('uploadSpeed').innerHTML;
                     console.log(
                         `Upload test completed in ${(elapsed / 1000000).toFixed(2)}s
                         Mean server throughput: ${throughput} Mbps`);
-                    fetch('https://infinite-peak-70034.herokuapp.com/upload', {
+                    fetch(serverUrl + '/upload', {
                       method: 'POST',
                       headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
                       },
-                      body: JSON.stringify({upload: uploadSpeed, id: uuid, completed:true})
+                      body: JSON.stringify({upload: uploadSpeedNum, id: uuid})
             }         ).then((data) => {
                         console.log(data);
                       })
@@ -714,16 +728,16 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
             console.log("ndt7 test completed with exit code:", exitcode)
             window.parent.postMessage(downloadSpeed + ' ' + uploadSpeed, '*');
-            fetch('https://infinite-peak-70034.herokuapp.com/', {
-              method: 'POST',
-              headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({upload: uploadSpeed, download: downloadSpeed, completed:true})
-            }).then((data) => {
-              console.log(data);
-            })
+            // fetch('https://infinite-peak-70034.herokuapp.com/', {
+            //   method: 'POST',
+            //   headers: {
+            //   'Accept': 'application/json',
+            //   'Content-Type': 'application/json'
+            //   },
+            //   body: JSON.stringify({upload: uploadSpeed, download: downloadSpeed, completed:true})
+            // }).then((data) => {
+            //   console.log(data);
+            // })
         });
 
 
