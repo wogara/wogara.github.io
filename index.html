@@ -31,7 +31,6 @@
   <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
   <script type="text/javascript">
 
-    //const serverUrl = 'https://4e61-2603-7000-4200-df6e-00-1920.ngrok-free.app';
     const serverUrl = 'https://infinite-peak-70034.herokuapp.com';
     function my_uidv4() {
           return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
@@ -738,8 +737,7 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             fin.innerHTML = "The speed test is now complete.";
             downloadSpeed = document.getElementById('downloadSpeed').innerHTML;
             uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
-            console.log("ndt7 test completed with exit code:", exitcode)
-            //window.parent.postMessage(downloadSpeed + ' ' + uploadSpeed, '*');
+            console.log("ndt7 test completed with exit code:", exitcode);
 
         });
 
