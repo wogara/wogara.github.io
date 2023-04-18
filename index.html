@@ -30,8 +30,8 @@
   </div>
   <script type="text/javascript">
 
-    const serverUrl = 'https://4e61-2603-7000-4200-df6e-00-1920.ngrok-free.app';
-    //or 'https://infinite-peak-70034.herokuapp.com/'
+    //const serverUrl = 'https://4e61-2603-7000-4200-df6e-00-1920.ngrok-free.app';
+    const serverUrl = 'https://infinite-peak-70034.herokuapp.com';
     function uuidv4() {
           return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
           (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -52,7 +52,9 @@
                         console.log(data);
                       }).catch(error => {
                         console.log(error);
-                      })
+                      });
+    window.parent.postMessage("1;"+uuid, '*');
+
 
 //upload worker
   var uploadBlob = new Blob([ '(',
@@ -675,6 +677,7 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                     document.getElementById('download').innerHTML = 'Download: ' + clientGoodput.toFixed(2) + ' Mbps';
                     let downloadSpeedNum = document.getElementById('downloadSpeed').innerHTML;
                     let serverCity = document.getElementById('serverCity').innerHTML;
+                    window.parent.postMessage("2;"+downloadSpeedNum, '*');
                     fetch(serverUrl + '/download', {
                       method: 'POST',
                       headers: {
@@ -705,6 +708,7 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                     console.log(
                         `Upload test completed in ${(elapsed / 1000000).toFixed(2)}s
                         Mean server throughput: ${throughput} Mbps`);
+                    window.parent.postMessage("3;"+uploadSpeedNum, '*');
                     fetch(serverUrl + '/upload', {
                       method: 'POST',
                       headers: {
@@ -728,16 +732,7 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
             console.log("ndt7 test completed with exit code:", exitcode)
             window.parent.postMessage(downloadSpeed + ' ' + uploadSpeed, '*');
-            // fetch('https://infinite-peak-70034.herokuapp.com/', {
-            //   method: 'POST',
-            //   headers: {
-            //   'Accept': 'application/json',
-            //   'Content-Type': 'application/json'
-            //   },
-            //   body: JSON.stringify({upload: uploadSpeed, download: downloadSpeed, completed:true})
-            // }).then((data) => {
-            //   console.log(data);
-            // })
+
         });
 
 
