@@ -26,42 +26,38 @@
     <div id="complete">The speed test is in progress...</div>
     <div id="downloadSpeed" hidden></div>
     <div id="uploadSpeed" hidden></div>
-    <div id="serverCity" hidden></div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
   <script type="text/javascript">
+      console.log(window.location.hostname);
+     
+			parent.postMessage(
+				{
+					user_age:    5,
+					user_height: 51,
+				},
+				"https://broadbandforall.civilspace.io/projects/1/engagements/1/sections/2");
 
-    const serverUrl = 'https://infinite-peak-70034.herokuapp.com';
-    function my_uidv4() {
+		
+      function uuidv4() {
           return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
           (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
           );
         }
-    function generateUuid() {
-      try{
-        return my_uuidv4();
-      } catch(e) {
-        return uuidv4();
-      }
-    }
-    const uuid = generateUuid();
-        console.log(uuid);
-    fetch(serverUrl, {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                      },
-                      body: JSON.stringify({id: uuid})
-            }         ).then((data) => {
-
-                        console.log(data);
-                      }).catch(error => {
-                        console.log(error);
-                      });
-    window.parent.postMessage("1;"+uuid, '*');
-
+      let uuid = uuidv4();
+      console.log(uuid);
+      console.log(window.location.href);
+      //fetch('https://warm-ridge-94886.herokuapp.com/http://54.237.28.150:3000', {
+              //fetch('http://54.237.28.150:3000', {
+              fetch('http://52.91.168.199:3000', {
+              method: 'POST',
+              headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({id: uuid, upload: null, download: null, completed:false})
+            }).then((data) => {
+              console.log(data);
+            })
 
 //upload worker
   var uploadBlob = new Blob([ '(',
@@ -662,9 +658,6 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                         machine: server.machine,
                         locations: server.location,
                     });
-                    document.getElementById('serverCity').innerHTML = server.location.city;
-                    console.log('server locs');
-                    console.log(server.location);
                     document.getElementById('server').innerHTML = 'Testing to: ' + server.machine + ' (' + server.location.city + ')';
                 },
                 downloadMeasurement: function (data) {
@@ -682,20 +675,6 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
     Mean client goodput: ${clientGoodput} Mbps`);
                     document.getElementById('downloadSpeed').innerHTML = clientGoodput.toFixed(2);
                     document.getElementById('download').innerHTML = 'Download: ' + clientGoodput.toFixed(2) + ' Mbps';
-                    let downloadSpeedNum = document.getElementById('downloadSpeed').innerHTML;
-                    let serverCity = document.getElementById('serverCity').innerHTML;
-                    window.parent.postMessage("2;"+downloadSpeedNum, '*');
-                    fetch(serverUrl + '/download', {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                      },
-                      body: JSON.stringify({download: downloadSpeedNum, id: uuid, server: serverCity})
-            }         ).then((data) => {
-                        console.log(data);
-                      })
                 },
                 uploadMeasurement: function (data) {
                     if (data.Source === 'server') {
@@ -706,27 +685,13 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
                 uploadComplete: function(data) {
                     const bytesReceived = data.LastServerMeasurement.TCPInfo.BytesReceived;
                     const elapsed = data.LastServerMeasurement.TCPInfo.ElapsedTime;
-
                     // bytes * bits/byte / microseconds = Mbps
                     const throughput =
                     bytesReceived * 8 / elapsed;
                     document.getElementById('uploadSpeed').innerHTML = throughput.toFixed(2);
-                    let uploadSpeedNum = document.getElementById('uploadSpeed').innerHTML;
                     console.log(
                         `Upload test completed in ${(elapsed / 1000000).toFixed(2)}s
-                        Mean server throughput: ${throughput} Mbps`);
-                    window.parent.postMessage("3;"+uploadSpeedNum, '*');
-                    fetch(serverUrl + '/upload', {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                      },
-                      body: JSON.stringify({upload: uploadSpeedNum, id: uuid})
-            }         ).then((data) => {
-                        console.log(data);
-                      })
+        Mean server throughput: ${throughput} Mbps`);
                 },
                 error: function (err) {
                     console.log('Error while running the test:', err.message);
@@ -737,8 +702,20 @@ var downloadURLBlob = URL.createObjectURL(downloadBlob)
             fin.innerHTML = "The speed test is now complete.";
             downloadSpeed = document.getElementById('downloadSpeed').innerHTML;
             uploadSpeed = document.getElementById('uploadSpeed').innerHTML;
-            console.log("ndt7 test completed with exit code:", exitcode);
-
+            console.log("ndt7 test completed with exit code:", exitcode)
+            //fetch('https://warm-ridge-94886.herokuapp.com/https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
+              //fetch('https://d473-2603-7000-4200-df6e-00-1920.ngrok.io/', {
+              //fetch('https://warm-ridge-94886.herokuapp.com/http://54.237.28.150:3000', {
+              fetch('http://52.91.168.199:3000', {
+              method: 'POST',
+              headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({id: uuid, upload: uploadSpeed, download: downloadSpeed, completed:true})
+            }).then((data) => {
+              console.log(data);
+            })
         });
 
 
