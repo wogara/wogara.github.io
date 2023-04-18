@@ -28,16 +28,24 @@
     <div id="uploadSpeed" hidden></div>
     <div id="serverCity" hidden></div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
   <script type="text/javascript">
 
     //const serverUrl = 'https://4e61-2603-7000-4200-df6e-00-1920.ngrok-free.app';
     const serverUrl = 'https://infinite-peak-70034.herokuapp.com';
-    function uuidv4() {
+    function my_uidv4() {
           return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
           (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
           );
         }
-    const uuid = uuidv4();
+    function generateUuid() {
+      try{
+        return my_uuidv4();
+      } catch(e) {
+        return uuidv4();
+      }
+    }
+    const uuid = generateUuid();
         console.log(uuid);
     fetch(serverUrl, {
                       method: 'POST',
